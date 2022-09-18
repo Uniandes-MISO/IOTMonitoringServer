@@ -62,14 +62,13 @@ def analyze_data():
     print("Calculando nuevas alertas...")
     data_new = Data.objects.filter(
         base_time__gte=datetime.now() - timedelta(hours=1))
-    aggregation_new = data_new.annotate(check_value_min=min('min_value'), check_value_max=max('max_value') ) \
+    aggregation_new = data_new.annotate(check_value_min=min('min_value'), ) \
         .select_related('station', 'measurement') \
         .select_related('station__user', 'station__location') \
         .select_related('station__location__city', 'station__location__state',
                         'station__location__country') \
-        .values('check_value_min', 'check_value_max', 'station__user__username',
+        .values('check_value_min','station__user__username',
                 'measurement__name',
-                'measurement__unit',
                 'measurement__max_value',
                 'measurement__min_value',
                 'station__location__city__name',
