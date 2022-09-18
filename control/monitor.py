@@ -85,6 +85,8 @@ def analyze_data():
         max_value = item["measurement__max_value"] or 0
         min_value = item["measurement__min_value"] or 0
         
+        print("-------------------------------------------------")
+        
         print("min_value {} max_value {}".format(min_value,max_value))
         
         diff = max_value - min_value
@@ -96,19 +98,19 @@ def analyze_data():
         city = item['station__location__city__name']
         user = item['station__user__username']
 
-        if diff > max_value:
-            alert = True
+        # if diff > max_value:
+        alert = True
 
-        if alert:
-            message = "*ALERT* {} {} ".format(variable, 1)
-            topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
-            print("Sending alert to {} {}".format(topic, variable))
-            client.publish(topic, message)
-            alerts += 1
+        # if alert:
+        message = "*ALERT* {} {} ".format(variable, 1)
+        topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
+        print("Sending alert to {} {}".format(topic, variable))
+        client.publish(topic, message)
+        alerts += 1
 
     print(len(aggregation), "dispositivos revisados")
     print(alerts, "Nuevas alertas enviadas")
-    print("*22222________________________________________________________________________________")
+    print("3333________________________________________________________________________________")
     
 
 
