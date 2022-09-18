@@ -92,7 +92,7 @@ def analyze_data():
         city = item['station__location__city__name']
         user = item['station__user__username']
 
-        if diff > max_value or diff < min_value:
+        if diff > max_value:
             alert = True
 
         if alert:
