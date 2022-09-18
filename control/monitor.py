@@ -87,10 +87,10 @@ def analyze_data():
         
         diff = max_value - min_value
 
-    #     country = item['station__location__country__name']
-    #     state = item['station__location__state__name']
-    #     city = item['station__location__city__name']
-    #     user = item['station__user__username']
+        country = item['station__location__country__name']
+        state = item['station__location__state__name']
+        city = item['station__location__city__name']
+        user = item['station__user__username']
 
     #     if diff > max_value:
     #         alert = True
@@ -104,6 +104,7 @@ def analyze_data():
 
     print(len(aggregation), "dispositivos revisados")
     print(alerts, "Nuevas alertas enviadas")
+    print(diff)
     print("*111__________________________________________________________________________________")
     
 
