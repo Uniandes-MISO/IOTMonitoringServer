@@ -76,31 +76,31 @@ def analyze_data():
                 'station__location__state__name',
                 'station__location__country__name')
     
-    alerts = 0
-    for item in aggregation_new:
-        alert = False
+    # alerts = 0
+    # for item in aggregation_new:
+    #     alert = False
 
-        variable = item["measurement__unit"]
+    #     variable = item["measurement__unit"]
         
-        max_value = item["measurement__max_value"] or 0
-        min_value = item["measurement__min_value"] or 0
+    #     max_value = item["measurement__max_value"] or 0
+    #     min_value = item["measurement__min_value"] or 0
         
-        diff = max_value - min_value
+    #     diff = max_value - min_value
 
-        country = item['station__location__country__name']
-        state = item['station__location__state__name']
-        city = item['station__location__city__name']
-        user = item['station__user__username']
+    #     country = item['station__location__country__name']
+    #     state = item['station__location__state__name']
+    #     city = item['station__location__city__name']
+    #     user = item['station__user__username']
 
-        if diff > max_value:
-            alert = True
+    #     if diff > max_value:
+    #         alert = True
 
-        if alert:
-            message = "*ALERT* {} {} ".format(variable, diff)
-            topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
-            print(datetime.now(), "Sending alert to {} {}".format(topic, variable))
-            client.publish(topic, message)
-            alerts += 1
+    #     if alert:
+    #         message = "*ALERT* {} {} ".format(variable, diff)
+    #         topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
+    #         print(datetime.now(), "Sending alert to {} {}".format(topic, variable))
+    #         client.publish(topic, message)
+    #         alerts += 1
 
     print(len(aggregation), "dispositivos revisados")
     print(alerts, "Nuevas alertas enviadas")
