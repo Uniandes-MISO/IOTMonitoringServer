@@ -57,6 +57,54 @@ def analyze_data():
 
     print(len(aggregation), "dispositivos revisados")
     print(alerts, "alertas enviadas")
+    
+    
+    print("Calculando nuevas alertas...")
+    data = Data.objects.filter(
+        base_time__gte=datetime.now() - timedelta(minutes=1))
+    aggregation = data.annotate(check_value_min=min('min_value'), check_value_max=max('max_value') ) \
+        .select_related('station', 'measurement') \
+        .select_related('station__user', 'station__location') \
+        .select_related('station__location__city', 'station__location__state',
+                        'station__location__country') \
+        .values('check_value_min', 'check_value_max', 'station__user__username',
+                'measurement__name',
+                'measurement__unit',
+                'measurement__max_value',
+                'measurement__min_value',
+                'station__location__city__name',
+                'station__location__state__name',
+                'station__location__country__name')
+    
+    alerts = 0
+    for item in aggregation:
+        alert = False
+
+        variable = item["measurement__unit"]
+        
+        max_value = item["measurement__max_value"] or 0
+        min_value = item["measurement__min_value"] or 0
+        
+        diff = max_value - min_value
+
+        country = item['station__location__country__name']
+        state = item['station__location__state__name']
+        city = item['station__location__city__name']
+        user = item['station__user__username']
+
+        if diff > max_value or diff < min_value:
+            alert = True
+
+        if alert:
+            message = "*ALERT* {} {} ".format(variable, diff)
+            topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
+            print(datetime.now(), "Sending alert to {} {}".format(topic, variable))
+            client.publish(topic, message)
+            alerts += 1
+
+    print(len(aggregation), "dispositivos revisados")
+    print(alerts, "Nuevas alertas enviadas")
+    
 
 
 def on_connect(client, userdata, flags, rc):
