@@ -1,6 +1,6 @@
 from argparse import ArgumentError
 import ssl
-from django.db.models import Avg
+from django.db.models import Avg, Min, Max
 from datetime import timedelta, datetime
 from receiver.models import Data, Measurement
 import paho.mqtt.client as mqtt
@@ -61,13 +61,13 @@ def analyze_data():
     
     print("Calculando nuevas alertas...")
     data_new = Data.objects.filter(
-        base_time__gte=datetime.now() - timedelta(hours=1))
-    aggregation_new = data_new.annotate(check_value_min=Avg('avg_value'), ) \
+        base_time__gte=datetime.now() - timedelta(minutes=5))
+    aggregation_new = data_new.annotate(check_value_min=Minn('min_value'), check_value_max=Max('max_value') ) \
         .select_related('station', 'measurement') \
         .select_related('station__user', 'station__location') \
         .select_related('station__location__city', 'station__location__state',
                         'station__location__country') \
-        .values('check_value_min', 'station__user__username',
+        .values('check_value_min', 'check_value_max', 'station__user__username',
                 'measurement__name',
                 'measurement__unit',
                 'measurement__max_value',
@@ -82,25 +82,25 @@ def analyze_data():
 
         variable = item["measurement__unit"]
         
-    #     max_value = item["measurement__max_value"] or 0
-    #     min_value = item["measurement__min_value"] or 0
+        max_value = item["measurement__max_value"] or 0
+        min_value = item["measurement__min_value"] or 0
         
-    #     diff = max_value - min_value
+        diff = max_value - min_value
 
-    #     country = item['station__location__country__name']
-    #     state = item['station__location__state__name']
-    #     city = item['station__location__city__name']
-    #     user = item['station__user__username']
+        country = item['station__location__country__name']
+        state = item['station__location__state__name']
+        city = item['station__location__city__name']
+        user = item['station__user__username']
 
-    #     if diff > max_value:
-    #         alert = True
+        if diff > max_value:
+            alert = True
 
-    #     if alert:
-    #         message = "*ALERT* {} {} ".format(variable, diff)
-    #         topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
-        print(datetime.now(), "Sending alert to {} {}".format(topic, variable))
-    #         client.publish(topic, message)
-    #         alerts += 1
+        if alert:
+            message = "*ALERT* {} {} ".format(variable, diff)
+            topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
+            print(datetime.now(), "Sending alert to {} {}".format(topic, variable))
+            client.publish(topic, message)
+            alerts += 1
 
     print(len(aggregation), "dispositivos revisados")
     print(alerts, "Nuevas alertas enviadas")
