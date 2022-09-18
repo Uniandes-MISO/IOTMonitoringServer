@@ -82,10 +82,10 @@ def analyze_data():
 
         variable = item["measurement__unit"]
         
-    #     max_value = item["measurement__max_value"] or 0
-    #     min_value = item["measurement__min_value"] or 0
+        max_value = item["measurement__max_value"] or 0
+        min_value = item["measurement__min_value"] or 0
         
-    #     diff = max_value - min_value
+        diff = max_value - min_value
 
     #     country = item['station__location__country__name']
     #     state = item['station__location__state__name']
@@ -104,7 +104,7 @@ def analyze_data():
 
     print(len(aggregation), "dispositivos revisados")
     print(alerts, "Nuevas alertas enviadas")
-    print("___________________________________________________________________________________")
+    print("*111__________________________________________________________________________________")
     
 
 
