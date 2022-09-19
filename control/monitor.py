@@ -110,7 +110,7 @@ def analyze_data():
 
     print(len(aggregation_new), "dispositivos revisados")
     print(alerts, "Nuevas alertas enviadas")
-    print("3333________________________________________________________________________________")
+    print("5555________________________________________________________________________________")
     
 
 
