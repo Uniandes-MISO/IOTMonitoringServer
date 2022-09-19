@@ -101,15 +101,15 @@ def analyze_data():
         city = item['station__location__city__name']
         user = item['station__user__username']
 
-        # if diff > max_value:
-        alert = True
+        if diff > (max_value-min_value):
+            alert = True
 
-        # if alert:
-        message = "*ALERT* {} {} ".format(variable, diff)
-        topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
-        print("Sending alert to {} {}".format(topic, variable))
-        client.publish(topic, message)
-        alerts += 1
+        if alert:
+            message = "*ALERT* {} {} ".format(variable, diff)
+            topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
+            print("Sending alert to {} {}".format(topic, variable))
+            client.publish(topic, message)
+            alerts += 1
 
     print(len(aggregation_new), "dispositivos revisados")
     print(alerts, "Nuevas alertas enviadas")
