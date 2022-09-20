@@ -94,7 +94,8 @@ def analyze_data():
         
         diff = max_value - min_value
         
-        print("diff {}".format(diff))
+        print("diff min-max device{}".format(diff))
+        print("diff min-max var {}".format((max_value-min_value)))
 
         country = item['station__location__country__name']
         state = item['station__location__state__name']
