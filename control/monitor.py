@@ -56,7 +56,7 @@ def analyze_data():
             alert = True
             msg_value = "<{}".format(min_value)
             
-        print("msg_value {}".format(msg_value))
+        print("msg_value: {}".format(msg_value))
         
         if alert:
             str_var = str(variable)
@@ -95,34 +95,27 @@ def analyze_data():
         alert = False
 
         variable = item["measurement__unit"]
-        
         max_value = item["measurement__max_value"] or 0
-        min_value = item["measurement__min_value"] or 0
-        
-        print("-------------------------------------------------")
-        
+        min_value = item["measurement__min_value"] or 0        
         check_value_min = item["check_value_min"]
         check_value_max = item["check_value_max"]
         
-        print("measurement min_value {} max_value {} ".format(min_value,max_value))
-        print("device min_value {} max_value {} ".format(check_value_min,check_value_max))
-        
-        diff_dev = check_value_max - check_value_min
-        diff_mes = max_value - min_value
-        
-        #print("diff min-max device{}".format(diff_dev))
-        #print("diff min-max var {}".format((diff_mes)))
-
         country = item['station__location__country__name']
         state = item['station__location__state__name']
         city = item['station__location__city__name']
         user = item['station__user__username']
 
+        diff_dev = check_value_max - check_value_min
+        diff_mes = max_value - min_value
+        
+        print("{} measurement {} min_value {} max_value {} diff {} ".format(city, variable, min_value,max_value,diff_mes))
+        print("{} device min_value {} max_value {} diff {}".format(city, check_value_min,check_value_max,diff_dev))
+                        
         if diff_dev > diff_mes:
             alert = True
 
         if alert:
-            message = "*ALERT* {} {} ".format(variable, diff)
+            message = "*ALERT* {} {} ".format(variable, diff_dev)
             
             topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
             print("Sending alert to {} {}".format(topic, variable))
