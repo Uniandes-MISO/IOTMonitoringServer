@@ -44,12 +44,21 @@ def analyze_data():
         state = item['station__location__state__name']
         city = item['station__location__city__name']
         user = item['station__user__username']
+        
+        msg_value = ""
 
-        if item["check_value"] > max_value or item["check_value"] < min_value:
+        if item["check_value"] > max_value :
             alert = True
+            msg_value = ">{}".format(max_value)
+            
+        
+        if item["check_value"] < min_value:
+            alert = True
+            msg_value = "<{}".format(min_value)
 
         if alert:
-            message = "ALERT {} {} {}".format(variable, min_value, max_value)
+            str_var = str(variable)
+            message = "ALERT {} ".format(str_var[0:8], msg_value)
             topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
             print(datetime.now(), "Sending alert to {} {}".format(topic, variable))
             client.publish(topic, message)
@@ -107,6 +116,7 @@ def analyze_data():
 
         if alert:
             message = "*ALERT* {} {} ".format(variable, diff)
+            
             topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
             print("Sending alert to {} {}".format(topic, variable))
             client.publish(topic, message)
