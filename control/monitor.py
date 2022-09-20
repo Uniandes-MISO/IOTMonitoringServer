@@ -104,13 +104,14 @@ def analyze_data():
         check_value_min = item["check_value_min"]
         check_value_max = item["check_value_max"]
         
-        print("min_value {} max_value {}".format(min_value,max_value))
+        print("measurement min_value {} max_value {} ".format(min_value,max_value))
+        print("device min_value {} max_value {} ".format(check_value_min,check_value_max))
         
         diff_dev = check_value_max - check_value_min
         diff_mes = max_value - min_value
         
-        print("diff min-max device{}".format(diff_dev))
-        print("diff min-max var {}".format((diff_mes)))
+        #print("diff min-max device{}".format(diff_dev))
+        #print("diff min-max var {}".format((diff_mes)))
 
         country = item['station__location__country__name']
         state = item['station__location__state__name']
