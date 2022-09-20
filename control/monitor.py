@@ -54,11 +54,11 @@ def analyze_data():
         
         if item["check_value"] < min_value:
             alert = True
-            msg_value = "<{}".format(min_value)
+            msg_value = "{}".format(min_value)
 
         if alert:
             str_var = str(variable)
-            message = "ALERT {} ".format(str_var[0:4], msg_value)
+            message = "ALERT {} {}".format(str_var[0:4], msg_value)
             topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
             print(datetime.now(), "Sending alert to {} {}".format(topic, variable))
             client.publish(topic, message)
