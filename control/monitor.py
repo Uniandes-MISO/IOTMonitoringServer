@@ -101,19 +101,23 @@ def analyze_data():
         
         print("-------------------------------------------------")
         
+        check_value_min = item["check_value_min"]
+        check_value_max = item["check_value_max"]
+        
         print("min_value {} max_value {}".format(min_value,max_value))
         
-        diff = max_value - min_value
+        diff_dev = check_value_max - check_value_min
+        diff_mes = max_value - min_value
         
-        print("diff min-max device{}".format(diff))
-        print("diff min-max var {}".format((max_value-min_value)))
+        print("diff min-max device{}".format(diff_dev))
+        print("diff min-max var {}".format((diff_mes)))
 
         country = item['station__location__country__name']
         state = item['station__location__state__name']
         city = item['station__location__city__name']
         user = item['station__user__username']
 
-        if diff > (max_value-min_value):
+        if diff_dev > diff_mes:
             alert = True
 
         if alert:
