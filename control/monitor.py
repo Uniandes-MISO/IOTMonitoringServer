@@ -54,8 +54,10 @@ def analyze_data():
         
         if item["check_value"] < min_value:
             alert = True
-            msg_value = "{}".format(min_value)
-
+            msg_value = "<{}".format(min_value)
+            
+        print("msg_value {}".format(msg_value))
+        
         if alert:
             str_var = str(variable)
             message = "ALERT {} {}".format(str_var[0:4], msg_value)
